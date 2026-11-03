@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#4f46e5" />
+  <title>DailyHub — Tasks, Notes & Calendar</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="app-container">
+    <!-- Top Header -->
+    <header class="app-header">
+      <div class="header-left">
+        <h1 id="view-title">My Tasks</h1>
+        <p id="current-date-label"></p>
+      </div>
+      <div class="header-actions">
+        <button id="theme-toggle" class="icon-btn" aria-label="Toggle Dark Mode" title="Toggle Theme">
+          <svg id="theme-icon" viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+        <button id="export-btn" class="icon-btn" aria-label="Backup Data" title="Backup / Export JSON">
+          <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content Views -->
+    <main class="app-content">
+      
+      <!-- 1. TO-DO LIST VIEW -->
+      <section id="view-tasks" class="view active">
+        <div class="stats-bar">
+          <div class="stat-pill">
+            <span class="stat-num" id="stat-total">0</span>
+            <span class="stat-label">Total</span>
+          </div>
+          <div class="stat-pill">
+            <span class="stat-num" id="stat-active">0</span>
+            <span class="stat-label">Pending</span>
+          </div>
+          <div class="stat-pill">
+            <span class="stat-num" id="stat-done">0</span>
+            <span class="stat-label">Done</span>
+          </div>
+        </div>
+
+        <div class="filter-bar">
+          <button class="chip active" data-filter="all">All</button>
+          <button class="chip" data-filter="active">Pending</button>
+          <button class="chip" data-filter="completed">Completed</button>
+          <button class="chip" data-filter="high">High Priority</button>
+        </div>
+
+        <div id="tasks-list" class="card-list"></div>
+      </section>
+
+      <!-- 2. NOTES VIEW -->
+      <section id="view-notes" class="view">
+        <div class="search-bar">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="note-search" placeholder="Search notes by title or content..." />
+        </div>
+        <div id="notes-grid" class="notes-grid"></div>
+      </section>
+
+      <!-- 3. PERSONAL CALENDAR VIEW -->
+      <section id="view-calendar" class="view">
+        <div class="calendar-card">
+          <div class="cal-header">
+            <button id="cal-prev" class="icon-btn-sm" aria-label="Previous Month">&lsaquo;</button>
+            <h2 id="cal-month-year">November 2026</h2>
+            <button id="cal-next" class="icon-btn-sm" aria-label="Next Month">&rsaquo;</button>
+          </div>
+          <div class="cal-weekdays">
+            <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+          </div>
+          <div id="cal-days" class="cal-days"></div>
+        </div>
+
+        <div class="selected-day-panel">
+          <div class="selected-day-header">
+            <h3 id="selected-date-label">Selected Date</h3>
+            <button id="add-event-inline-btn" class="btn-text">+ Add Event</button>
+          </div>
+          <div id="day-items-list" class="card-list"></div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Floating Action Button -->
+    <button id="fab-add" class="fab" aria-label="Add item">
+      <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2.5" fill="none">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+    </button>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+      <button class="nav-item active" data-target="tasks">
+        <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none">
+          <path d="M9 11l3 3L22 4"></path>
+          <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+        </svg>
+        <span>Tasks</span>
+      </button>
+      <button class="nav-item" data-target="notes">
+        <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+        </svg>
+        <span>Notes</span>
+      </button>
+      <button class="nav-item" data-target="calendar">
+        <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        <span>Calendar</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- MODAL FOR TASK CREATE / EDIT -->
+  <div id="modal-task" class="modal-overlay hidden">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <h3 id="modal-task-title">New Task</h3>
+        <button class="close-modal" data-close="modal-task">&times;</button>
+      </div>
+      <form id="form-task">
+        <input type="hidden" id="task-id" />
+        <div class="form-group">
+          <label for="task-name">Task Title *</label>
+          <input type="text" id="task-name" required placeholder="e.g., Submit project proposal" />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="task-date">Due Date</label>
+            <input type="date" id="task-date" />
+          </div>
+          <div class="form-group">
+            <label for="task-priority">Priority</label>
+            <select id="task-priority">
+              <option value="low">Low</option>
+              <option value="medium" selected>Medium</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="task-desc">Details (Optional)</label>
+          <textarea id="task-desc" rows="2" placeholder="Sub-items or context..."></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary close-modal" data-close="modal-task">Cancel</button>
+          <button type="submit" class="btn-primary">Save Task</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL FOR NOTE CREATE / EDIT -->
+  <div id="modal-note" class="modal-overlay hidden">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <h3 id="modal-note-title">Write Note</h3>
+        <button class="close-modal" data-close="modal-note">&times;</button>
+      </div>
+      <form id="form-note">
+        <input type="hidden" id="note-id" />
+        <div class="form-group">
+          <label for="note-title">Note Title *</label>
+          <input type="text" id="note-title" required placeholder="Note heading..." />
+        </div>
+        <div class="form-group">
+          <label for="note-body">Content *</label>
+          <textarea id="note-body" rows="6" required placeholder="Write your thoughts, lists, or ideas here..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Card Color</label>
+          <div class="color-picker" id="note-color-picker">
+            <button type="button" class="color-dot selected" data-color="default" style="background:#ffffff"></button>
+            <button type="button" class="color-dot" data-color="amber" style="background:#fef3c7"></button>
+            <button type="button" class="color-dot" data-color="emerald" style="background:#d1fae5"></button>
+            <button type="button" class="color-dot" data-color="sky" style="background:#e0f2fe"></button>
+            <button type="button" class="color-dot" data-color="rose" style="background:#ffe4e6"></button>
+            <button type="button" class="color-dot" data-color="violet" style="background:#ede9fe"></button>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" id="delete-note-btn" class="btn-danger hidden">Delete</button>
+          <button type="button" class="btn-secondary close-modal" data-close="modal-note">Cancel</button>
+          <button type="submit" class="btn-primary">Save Note</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL FOR CALENDAR EVENT CREATE / EDIT -->
+  <div id="modal-event" class="modal-overlay hidden">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <h3 id="modal-event-title">Calendar Entry</h3>
+        <button class="close-modal" data-close="modal-event">&times;</button>
+      </div>
+      <form id="form-event">
+        <input type="hidden" id="event-id" />
+        <div class="form-group">
+          <label for="event-title">Event Title *</label>
+          <input type="text" id="event-title" required placeholder="e.g., Dentist Appointment, Gym, Flight" />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="event-date">Date *</label>
+            <input type="date" id="event-date" required />
+          </div>
+          <div class="form-group">
+            <label for="event-time">Time</label>
+            <input type="time" id="event-time" value="09:00" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="event-category">Tag Color</label>
+          <select id="event-category">
+            <option value="#4f46e5">Indigo (Personal)</option>
+            <option value="#10b981">Emerald (Health/Fitness)</option>
+            <option value="#f59e0b">Amber (Work/Deadline)</option>
+            <option value="#ef4444">Rose (Urgent/Important)</option>
+            <option value="#06b6d4">Cyan (Social/Travel)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="event-notes">Custom Notes / Location</label>
+          <textarea id="event-notes" rows="2" placeholder="Add custom details for this day..."></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" id="delete-event-btn" class="btn-danger hidden">Delete</button>
+          <button type="button" class="btn-secondary close-modal" data-close="modal-event">Cancel</button>
+          <button type="submit" class="btn-primary">Save Entry</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

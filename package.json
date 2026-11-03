@@ -1,0 +1,19 @@
+{
+  "name": "dailyhub-android-app",
+  "version": "1.0.0",
+  "description": "HTML/CSS/JS To-Do List, Notes, and Personal Calendar packaged for Android APK via Capacitor",
+  "main": "www/index.html",
+  "scripts": {
+    "start": "npx serve www",
+    "android:init": "npx cap add android",
+    "android:sync": "npx cap sync android",
+    "android:open": "npx cap open android"
+  },
+  "dependencies": {
+    "@capacitor/android": "^6.0.0",
+    "@capacitor/core": "^6.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.0.0"
+  }
+}
